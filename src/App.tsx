@@ -266,12 +266,12 @@ function App() {
 
   return (
     <div className='w-screen h-screen gap-2  text-[hsl(0,0%,98%)] bg-background px-10 space-y-10 text-sm'>
-      <header className='border-muted border-b py-4 h-[5vh] flex items-center gap-x-4'>
-        <h1 className='font-semibold text-lg'>WebMap Performance Playground (learn more --)</h1>
+      <header className='border-muted border-b py-4 h-[7vh] gap-x-4'>
+        <h1 className='font-semibold text-lg'>WebMap Performance Playground (<a href='https://github.com/jeafreezy/webmap-compare' className='text-sm underline'>Learn more</a>)</h1>
         <small>How many GeoJSON features can {selectedLibrary} render before it becomes slow?</small>
         {/* Add external link icon and link to github repo. */}
       </header>
-      <div className='grid grid-rows-1 grid-cols-6 gap-10 h-[90vh]'>
+      <div className='grid grid-rows-1 grid-cols-6 gap-10 h-[85vh]'>
 
         {/* Maplibre*/}
         {
