@@ -1,53 +1,55 @@
-# React + TypeScript + Vite
+# Webmap Compare
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a demo project to compare the performance of `Mapibre GL JS` and `Leaflet JS` when rendering large GeoJSON features on the map in draw mode.
 
-Currently, two official plugins are available:
+Draw functionality is powered by [TerraDraw](https://github.com/JamesLMilner/terra-draw/tree/main).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Features
+- Draw Mode: Use TerraDraw to add or select, point, line and polygons features on the map.
+- Random GeoJSON generator - Generate random GeoJSON features.
+- GeoJSON Rendering: Test the rendering capabilities of different mapping libraries with large datasets.
 
-- Configure the top-level `parserOptions` property like this:
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Usage
+
+1. Select the mapping library.
+2. Generate random geeometries.
+3. Draw or select features on the map.
+4. Pan and zoom to observe how each mapping library handles the rendering of large GeoJSON datasets. Take note of any performance issues or crashes.
+
+## Setup
+
+Clone:
+
+```bash
+git clone https://github.com/jeafreezy/webmap-compare.git
+cd webmap-compare
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+Install dependencies:
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```bash
+pnpm install
 ```
+
+
+Start development server:
+
+
+```bash
+pnpm  dev
+```
+
+## Technologies Used
+
+- [MapLibre GL JS](https://maplibre.org/maplibre-gl-js/docs/)
+- [Leaflet JS](https://leafletjs.com/)
+- [TerraDraw](https://github.com/JamesLMilner/terra-draw/tree/main).
+
+
 
 
 
