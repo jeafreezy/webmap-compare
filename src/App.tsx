@@ -1,5 +1,5 @@
 
-import { useCallback, useEffect, useState, } from 'react'
+import { useCallback, useEffect, useMemo, useState, } from 'react'
 import maplibregl, { AttributionControl, Map } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import 'leaflet/dist/leaflet.css'
@@ -213,10 +213,9 @@ function App() {
 
   }, [selectedLibrary])
 
-  const getTotalFeatures = useCallback(() => {
-    if (!maplibreMap) return
+  const totalFeatures = useMemo(() => {
     return featureCollection.features.length
-  }, [maplibreMap, featureCollection])
+  }, [featureCollection])
 
 
   //add draw instance to maplibre
@@ -269,7 +268,6 @@ function App() {
       <header className='border-muted border-b py-4 h-[7vh] gap-x-4'>
         <h1 className='font-semibold text-lg'>WebMap Performance Playground (<a href='https://github.com/jeafreezy/webmap-compare' className='text-sm underline'>Learn more</a>)</h1>
         <small>How many GeoJSON features can {selectedLibrary} render before it becomes slow?</small>
-        {/* Add external link icon and link to github repo. */}
       </header>
       <div className='grid grid-rows-1 grid-cols-6 gap-10 h-[85vh]'>
 
@@ -329,7 +327,7 @@ function App() {
           {/* Buttons */}
           <button className='rounded-md transition-all bg-muted py-3 hover:bg-opacity-80' onClick={handleMapUpdate}>Generate</button>
           <button className='rounded-md transition-all bg-red-950 py-3 hover:bg-opacity-80' onClick={handleReset}>Reset Map</button>
-          <h1 className='font-medium'>Total Features: {getTotalFeatures()}</h1>
+          <h1 className='font-medium'>Total Features: {totalFeatures}</h1>
         </div>
       </div>
     </div>
