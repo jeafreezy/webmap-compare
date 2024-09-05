@@ -77,7 +77,7 @@ const style = {
     {
       "id": "osm",
       "type": "raster",
-      "source": "osm" // This must match the source key above
+      "source": "osm"
     }
   ]
 };
@@ -120,6 +120,8 @@ function App() {
     if (drawInstance) {
       //clear the features before adding them back to prevent 'feature already exist error'
       drawInstance.clear();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       drawInstance.addFeatures(newFeatures)
     }
   }, [featureCount, selectedGeom, maplibreMap, drawInstance, featureCollection])
@@ -180,10 +182,11 @@ function App() {
       // Create Map
       const map = new maplibregl.Map({
         container: "map",
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         style: style,
         center: [DEFAULTS.longitude, DEFAULTS.latitude],
         zoom: DEFAULTS.zoom,
-        attributionControl: true
       });
       map.on('load', () => {
         map.addControl(new AttributionControl({
@@ -248,6 +251,8 @@ function App() {
       const snapshot = drawInstance.getSnapshot();
       setFeatureCollection({
         type: 'FeatureCollection',
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         features: snapshot
       });
     })

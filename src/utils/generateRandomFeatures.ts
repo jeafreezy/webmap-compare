@@ -41,6 +41,8 @@ export const generateRandomPoints = (maxFeatures: number) => {
                 mode: "point",
             }
         };
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         featureCollection.features.push(feature)
     }
     return featureCollection
@@ -82,6 +84,8 @@ export const generateRandomLines = (maxFeatures: number) => {
                 mode: "linestring",
             }
         };
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         featureCollection.features.push(feature)
     }
     return featureCollection
@@ -142,6 +146,8 @@ export const generateRandomPolygons = (maxFeatures: number, width: number = 5, h
                 mode: "polygon",
             }
         };
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         featureCollection.features.push(feature)
     }
     return featureCollection
