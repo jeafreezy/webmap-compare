@@ -1,6 +1,6 @@
 
 import { useCallback, useEffect, useMemo, useState, } from 'react'
-import maplibregl, { AttributionControl, Map } from 'maplibre-gl';
+import maplibregl, { AttributionControl, Map as libreMap, NavigationControl } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import 'leaflet/dist/leaflet.css'
 import { generateRandomLines, generateRandomPoints, generateRandomPolygons, TFeatureCollection } from './utils/generateRandomFeatures';
@@ -11,28 +11,48 @@ import {
   TerraDrawPointMode, TerraDrawPolygonMode,
   TerraDrawLineStringMode,
   TerraDrawSelectMode,
+  TerraDrawOpenLayersAdapter,
 } from "terra-draw";
 import * as L from 'leaflet'
+import Map from 'ol/Map.js';
+import OSM from 'ol/source/OSM.js';
+import TileLayer from 'ol/layer/Tile.js';
+import View from 'ol/View.js';
+import GeoJSON from "ol/format/GeoJSON";
+import { Circle } from 'ol/geom';
+import Feature from 'ol/Feature';
+import Style from 'ol/style/Style';
+import VectorLayer from 'ol/layer/Vector';
+import VectorSource from 'ol/source/Vector';
+import Stroke from 'ol/style/Stroke';
+import { toLonLat } from 'ol/proj';
+import CircleStyle from 'ol/style/Circle';
 
 type TCommon = {
   name: string
   id: string
 }
+
+enum MAPPING_LIBRARY {
+  LEAFLET = 'leaflet',
+  OPENLAYERS = 'ol',
+  MAPLIBRE = 'maplibre'
+}
+
 const mappingLibraries: TCommon[] = [
   {
     name: 'Maplibre GL JS (v 4.6.0)',
-    id: 'maplibre'
+    id: MAPPING_LIBRARY.MAPLIBRE
   },
-  // { add later
-  //   name: 'OpenLayers (v 4.6.0)',
-  //   id: 'openlayers'
-  // },
+  {
+    name: 'OpenLayers (v 10.0.0)',
+    id: MAPPING_LIBRARY.OPENLAYERS
+  },
   {
     name: 'Leaflet JS (v 1.9.4)',
-    id: 'leaflet'
+    id: MAPPING_LIBRARY.LEAFLET
   }
 ]
-
 
 const geometryTypes: TCommon[] = [
   {
@@ -93,8 +113,9 @@ function App() {
   const [selectedGeom, setSelectedGeom] = useState(DEFAULTS.geometry);
   const [featureCount, setFeatureCount] = useState(DEFAULTS.features);
   const [featureCollection, setFeatureCollection] = useState<TFeatureCollection>(EMPTY_FEATURE_COLLECTION);
-  const [maplibreMap, setMapLibreMap] = useState<Map | null>(null);
+  const [maplibreMap, setMapLibreMap] = useState<libreMap | null>(null);
   const [leafletMap, setLeafletMap] = useState<L.Map | null>(null);
+  const [olMap, setOlMap] = useState<Map | null>(null);
   const [drawInstance, setDrawInstance] = useState<TerraDraw | null>(null)
 
   const handleLibrarySelection = (e: any) => {
@@ -178,7 +199,7 @@ function App() {
 
   // render maps
   useEffect(() => {
-    if (selectedLibrary === 'maplibre') {
+    if (selectedLibrary === MAPPING_LIBRARY.MAPLIBRE) {
       // Create Map
       const map = new maplibregl.Map({
         container: "map",
@@ -192,12 +213,32 @@ function App() {
         map.addControl(new AttributionControl({
           customAttribution: attribution
         }))
+        map.addControl(new NavigationControl(), 'top-left')
         setMapLibreMap(map)
       })
       return (() => {
         map.off('load', () => setMapLibreMap(null))
       })
-    } else {
+    } else if (selectedLibrary === MAPPING_LIBRARY.OPENLAYERS) {
+      const map = new Map({
+        target: 'map',
+        layers: [
+          new TileLayer({
+            source: new OSM(),
+          }),
+        ],
+        view: new View({
+          center: [DEFAULTS.longitude, DEFAULTS.latitude],
+          zoom: DEFAULTS.zoom,
+        }),
+      });
+      map.once('postrender', () => {
+        setOlMap(map);
+      })
+
+
+    }
+    else {
       const map = L.map('leaflet-map', {
         center: [DEFAULTS.latitude, DEFAULTS.longitude,],
         zoom: DEFAULTS.zoom,
@@ -243,6 +284,31 @@ function App() {
     setFeatureCollection(EMPTY_FEATURE_COLLECTION)
   }, [leafletMap,]);
 
+  // add draw instance to ol
+  useEffect(() => {
+    if (!olMap) return
+    const draw = new TerraDraw({
+      adapter: new TerraDrawOpenLayersAdapter({
+        lib: {
+          Circle,
+          Feature,
+          GeoJSON,
+          Style,
+          VectorLayer,
+          VectorSource,
+          Stroke,
+          toLonLat,
+          CircleStyle,
+        }, map: olMap, coordinatePrecision: 4,
+      }),
+      modes: drawModes
+    });
+    setDrawInstance(draw)
+    draw.start()
+    //reset
+    setFeatureCollection(EMPTY_FEATURE_COLLECTION)
+  }, [olMap,]);
+
   //track the draw events
   useEffect(() => {
     if (!drawInstance) return
@@ -273,17 +339,23 @@ function App() {
 
         {/* Maplibre*/}
         {
-          selectedLibrary === 'maplibre' && <div id="map" className='col-span-5 w-full h-full rounded-lg relative'>
+          selectedLibrary === MAPPING_LIBRARY.MAPLIBRE && <div id="map" className='col-span-5 w-full h-full rounded-lg relative'>
             <InfoPanel drawInstance={drawInstance} selectedGeom={selectedGeom} />
           </div>
         }
         {/* Leaflet */}
         {
-          selectedLibrary === 'leaflet' && <div id="leaflet-map" className='col-span-5 w-full h-full rounded-lg relative'>
+          selectedLibrary === MAPPING_LIBRARY.LEAFLET && <div id="leaflet-map" className='col-span-5 w-full h-full rounded-lg relative'>
             <InfoPanel drawInstance={drawInstance} selectedGeom={selectedGeom} />
           </div>
         }
+        {/* Open Layers */}
 
+        {
+          selectedLibrary === MAPPING_LIBRARY.OPENLAYERS && <div id="map" className='col-span-5 w-full h-full rounded-lg relative'>
+            <InfoPanel drawInstance={drawInstance} selectedGeom={selectedGeom} />
+          </div>
+        }
         {/* Sidebar */}
         <div className='col-span-1 flex flex-col gap-y-6'>
           <p>Map Interactions</p>

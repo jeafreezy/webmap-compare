@@ -18,8 +18,8 @@ importers:
         specifier: ^4.6.0
         version: 4.6.0
       ol:
-        specifier: ^10.1.0
-        version: 10.1.0
+        specifier: ^10.0.0
+        version: 10.0.0
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -532,9 +532,6 @@ packages:
 
   '@types/prop-types@15.7.12':
     resolution: {integrity: sha512-5zvhXYtRNRluoE/jAp4GVsSduVUzNWKkOZrCDBWYtE7biZywwdC2AcEzg+cSMLFRfVgeAFqpfNabiPjxFddV1Q==}
-
-  '@types/rbush@3.0.4':
-    resolution: {integrity: sha512-knSt9cCW8jj1ZSFcFeBZaX++OucmfPxxHiRwTahZfJlnQsek7O0bazTJHWD2RVj9LEoejUYF2de3/stf+QXcXw==}
 
   '@types/react-dom@18.3.0':
     resolution: {integrity: sha512-EhwApuTmMBmXuFOikhQLIBUn6uFg81SwLMOAUgodJF14SOBOCMdU04gDoYi0WOJJHD144TL32z4yDqCW3dnkQg==}
@@ -1213,8 +1210,8 @@ packages:
     resolution: {integrity: sha512-RSn9F68PjH9HqtltsSnqYC1XXoWe9Bju5+213R98cNGttag9q9yAOTzdbsqvIa7aNm5WffBZFpWYr2aWrklWAw==}
     engines: {node: '>= 6'}
 
-  ol@10.1.0:
-    resolution: {integrity: sha512-/efepydpzhFoeczA9KAN5t7G0WpFhP46ZXEfSl6JbZ7ipQZ2axpkYB2qt0qcOUlPFYMt7/XQFApH652KB08tTg==}
+  ol@10.0.0:
+    resolution: {integrity: sha512-Gzfh61cQAxseCWL97VpGwbF91R2D69y3ABUewTl2H1Hjy6ipCtnoKshgO+n3WBrjsbsyS8QnkfmiJZNQGQNeOA==}
 
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
@@ -2048,8 +2045,6 @@ snapshots:
 
   '@types/prop-types@15.7.12': {}
 
-  '@types/rbush@3.0.4': {}
-
   '@types/react-dom@18.3.0':
     dependencies:
       '@types/react': 18.3.5
@@ -2745,9 +2740,8 @@ snapshots:
 
   object-hash@3.0.0: {}
 
-  ol@10.1.0:
+  ol@10.0.0:
     dependencies:
-      '@types/rbush': 3.0.4
       color-rgba: 3.0.0
       color-space: 2.0.1
       earcut: 3.0.0
